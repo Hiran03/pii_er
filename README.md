@@ -100,13 +100,26 @@ non-PII = CITY, LOCATION
 Size B Noise B
 
 ## Train
-A different model was chosen because it best performs in this job
+Use microsoft/xtremedistil-l6-h384-uncased over DistilBERT because:
+
+It’s distilled from XLM-R, which is much better for NER and noisy text.
+
+Its SentencePiece tokenizer handles ASR mistakes, phonetic spellings, and broken words far better than BERT’s WordPiece.
+
+It’s 3× smaller and faster than DistilBERT (1.3 ms latency in your test).
+
+It performs significantly better on entity spans, especially names, dates, cities, and noisy tokens.
+
+It is explicitly optimized for multilingual and noisy sequence labeling, while DistilBERT is not.
+
+
 ```bash
 python src/train.py \
   --model_name microsoft/xtremedistil-l6-h384-uncased \
   --train data/train.jsonl --dev data/dev.jsonl \
   --out_dir out
 ```
+**Running for 50 epochs**
 
 ## Predict
 
